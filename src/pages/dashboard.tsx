@@ -55,6 +55,7 @@ const options: ApexOptions = {
 
 
     },
+
     fill: {
         opacity: 0.3,
         type: 'gradient',
@@ -64,8 +65,6 @@ const options: ApexOptions = {
             opacityTo: 0.3
         }
     }
-
-
 }
 
 const series = [
