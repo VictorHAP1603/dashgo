@@ -1,35 +1,41 @@
 import { Icon, Flex, Input } from "@chakra-ui/react";
+import { useRef } from "react";
 import { RiSearchLine } from "react-icons/ri";
 
+// Controlled components
+// Uncontrolled components
 
 export function SearchBox() {
-    return (
-        <Flex
-            as="label"
-            flex="1"
-            py="4"
-            px="8"
-            ml="6"
-            maxWidth="400"
-            alignSelf="center"
-            color="gray.200"
-            position="relative"
-            bg="gray.800"
-            borderRadius="full"
+  //   const [search, setSearch] = useState("");
 
-            align="center"
-        >
-            <Input
-                color="gray.50"
-                variant="unstyled"
-                px="4"
-                mr="4"
-                placeholder="Buscar na plataforma"
-                _placeholder={{ color: 'gray.400' }}
-            />
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-            <Icon as={RiSearchLine} fontSize="20" />
+  return (
+    <Flex
+      as="label"
+      flex="1"
+      py="4"
+      px="8"
+      ml="6"
+      maxWidth="400"
+      alignSelf="center"
+      color="gray.200"
+      position="relative"
+      bg="gray.800"
+      borderRadius="full"
+      align="center"
+    >
+      <Input
+        color="gray.50"
+        variant="unstyled"
+        px="4"
+        mr="4"
+        placeholder="Buscar na plataforma"
+        _placeholder={{ color: "gray.400" }}
+        ref={searchInputRef}
+      />
 
-        </Flex>
-    )
+      <Icon as={RiSearchLine} fontSize="20" />
+    </Flex>
+  );
 }
