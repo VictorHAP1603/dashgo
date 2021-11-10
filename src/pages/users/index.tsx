@@ -19,7 +19,7 @@ import Link from "next/link";
 
 import { Header } from "../../components/Header";
 import Pagination from "../../components/Pagination";
-import { Sidebar } from "../../components/Siderbar";
+import { Sidebar } from "../../components/SideBar";
 
 export default function UsersList() {
   const isWideVersion = useBreakpointValue({
@@ -54,70 +54,42 @@ export default function UsersList() {
             </Link>
           </Flex>
 
-          <Box w={["320px", "100%"]} overflowX="auto">
-            <Table w={["500px", "100%"]} colorScheme="whiteAlpha">
-              <Thead>
-                <Tr>
-                  <Th px={["4", "4", "6"]} color="gray.300" w="8">
-                    <Checkbox colorScheme="pink" />
-                  </Th>
-                  <Th>Usuário</Th>
-                  {isWideVersion && <Th>Data de cadastro</Th>}
-                  <Th w="8"></Th>
-                </Tr>
-              </Thead>
+          <Table colorScheme="whiteAlpha">
+            <Thead>
+              <Tr>
+                <Th px={["4", "4", "6"]} color="gray.300" w="8">
+                  <Checkbox colorScheme="pink" />
+                </Th>
 
-              <Tbody>
-                <Tr>
-                  <Td px={["4", "4", "6"]}>
-                    <Checkbox colorScheme="pink" />
-                  </Td>
+                <Th>Usuário</Th>
 
-                  <Td>
-                    <Box>
-                      <Text fontWeight="bold">Victor Hugo</Text>
-                      <Text fontSize="sm" color="gray.300">
-                        valvesperricci@yahoo.com.br
-                      </Text>
-                    </Box>
-                  </Td>
+                {isWideVersion &&
+                  <>
+                    <Th>Data de cadastro</Th>
+                    <Th w={["5", "8"]}></Th>
+                  </>
+                }
+              </Tr>
+            </Thead>
 
-                  {isWideVersion && <Td>16 de Março, 2021</Td>}
+            <Tbody>
+              <Tr>
+                <Td px={["4", "4", "6"]}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
 
-                  <Td>
-                    <Button
-                      as="a"
-                      cursor="pointer"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="purple"
-                      leftIcon={
-                        isWideVersion && (
-                          <Icon as={RiPencilLine} fontSize="16" />
-                        )
-                      }
-                    >
-                      {isWideVersion ? "Editar" : <RiPencilLine />}
-                    </Button>
-                  </Td>
-                </Tr>
+                <Td>
+                  <Box>
+                    <Text fontWeight="bold">Victor Hugo</Text>
+                    <Text fontSize="sm" color="gray.300">
+                      valvesperricci@yahoo.com.br
+                    </Text>
+                  </Box>
+                </Td>
 
-                <Tr>
-                  <Td px={["4", "4", "6"]}>
-                    <Checkbox colorScheme="pink" />
-                  </Td>
+                {isWideVersion && <Td>16 de Março, 2021</Td>}
 
-                  <Td>
-                    <Box>
-                      <Text fontWeight="bold">Victor Hugo</Text>
-                      <Text fontSize="sm" color="gray.300">
-                        valvesperricci@yahoo.com.br
-                      </Text>
-                    </Box>
-                  </Td>
-
-                  {isWideVersion && <Td>16 de Março, 2021</Td>}
-
+                {isWideVersion &&
                   <Td>
                     <Button
                       as="a"
@@ -125,33 +97,30 @@ export default function UsersList() {
                       size="sm"
                       fontSize="sm"
                       colorScheme="purple"
-                      leftIcon={
-                        isWideVersion && (
-                          <Icon as={RiPencilLine} fontSize="16" />
-                        )
-                      }
-                    >
-                      {isWideVersion ? "Editar" : <RiPencilLine />}
+                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
+                      Editar
                     </Button>
                   </Td>
-                </Tr>
+                }
+              </Tr>
 
-                <Tr>
-                  <Td px={["4", "4", "6"]}>
-                    <Checkbox colorScheme="pink" />
-                  </Td>
+              <Tr>
+                <Td px={["4", "4", "6"]}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
 
-                  <Td>
-                    <Box>
-                      <Text fontWeight="bold">Victor Hugo</Text>
-                      <Text fontSize="sm" color="gray.300">
-                        valvesperricci@yahoo.com.br
-                      </Text>
-                    </Box>
-                  </Td>
+                <Td>
+                  <Box>
+                    <Text fontWeight="bold">Victor Hugo</Text>
+                    <Text fontSize="sm" color="gray.300">
+                      valvesperricci@yahoo.com.br
+                    </Text>
+                  </Box>
+                </Td>
 
-                  {isWideVersion && <Td>16 de Março, 2021</Td>}
+                {isWideVersion && <Td>16 de Março, 2021</Td>}
 
+                {isWideVersion &&
                   <Td>
                     <Button
                       as="a"
@@ -159,33 +128,31 @@ export default function UsersList() {
                       size="sm"
                       fontSize="sm"
                       colorScheme="purple"
-                      leftIcon={
-                        isWideVersion && (
-                          <Icon as={RiPencilLine} fontSize="16" />
-                        )
-                      }
-                    >
-                      {isWideVersion ? "Editar" : <RiPencilLine />}
+                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
+                      Editar
                     </Button>
                   </Td>
-                </Tr>
+                }
 
-                <Tr>
-                  <Td px={["4", "4", "6"]}>
-                    <Checkbox colorScheme="pink" />
-                  </Td>
+              </Tr>
 
-                  <Td>
-                    <Box>
-                      <Text fontWeight="bold">Victor Hugo</Text>
-                      <Text fontSize="sm" color="gray.300">
-                        valvesperricci@yahoo.com.br
-                      </Text>
-                    </Box>
-                  </Td>
+              <Tr>
+                <Td px={["4", "4", "6"]}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
 
-                  {isWideVersion && <Td>16 de Março, 2021</Td>}
+                <Td>
+                  <Box>
+                    <Text fontWeight="bold">Victor Hugo</Text>
+                    <Text fontSize="sm" color="gray.300">
+                      valvesperricci@yahoo.com.br
+                    </Text>
+                  </Box>
+                </Td>
 
+                {isWideVersion && <Td>16 de Março, 2021</Td>}
+
+                {isWideVersion &&
                   <Td>
                     <Button
                       as="a"
@@ -193,19 +160,45 @@ export default function UsersList() {
                       size="sm"
                       fontSize="sm"
                       colorScheme="purple"
-                      leftIcon={
-                        isWideVersion && (
-                          <Icon as={RiPencilLine} fontSize="16" />
-                        )
-                      }
-                    >
-                      {isWideVersion ? "Editar" : <RiPencilLine />}
+                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
+                      Editar
                     </Button>
                   </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </Box>
+                }
+              </Tr>
+
+              <Tr>
+                <Td px={["4", "4", "6"]}>
+                  <Checkbox colorScheme="pink" />
+                </Td>
+
+                <Td>
+                  <Box>
+                    <Text fontWeight="bold">Victor Hugo</Text>
+                    <Text fontSize="sm" color="gray.300">
+                      valvesperricci@yahoo.com.br
+                    </Text>
+                  </Box>
+                </Td>
+
+                {isWideVersion && <Td>16 de Março, 2021</Td>}
+
+                {isWideVersion &&
+                  <Td>
+                    <Button
+                      as="a"
+                      cursor="pointer"
+                      size="sm"
+                      fontSize="sm"
+                      colorScheme="purple"
+                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
+                      Editar
+                    </Button>
+                  </Td>
+                }
+              </Tr>
+            </Tbody>
+          </Table>
           <Pagination />
         </Box>
       </Flex>
