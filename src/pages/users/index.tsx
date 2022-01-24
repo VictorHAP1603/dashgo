@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Flex,
@@ -13,19 +14,45 @@ import {
   Checkbox,
   Text,
   useBreakpointValue,
+  Spinner,
+  Link
 } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import Link from "next/link";
+import NextLink from "next/link";
+
 
 import { Header } from "../../components/Header";
 import Pagination from "../../components/Pagination";
 import { Sidebar } from "../../components/SideBar";
+import { getUsers, GetUsersResponse, useUsers } from "../../hooks/useUsers";
+import { queryClient } from "../../services/queryCliente";
+import { api } from "../../services/api";
+import { GetServerSideProps } from "next";
 
-export default function UsersList() {
+
+
+export default function UsersList({ users }) {
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const { data, isLoading, error, isFetching } = useUsers(currentPage, {
+    initialData: users
+  })
+
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const { data: dataUserId } = await api.get(`/users/${userId}`)
+
+      return dataUserId
+    }, {
+      staleTime: 1000 * 60 * 10
+    })
+  }
 
   return (
     <Box>
@@ -38,9 +65,10 @@ export default function UsersList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Usuários
+              {isFetching && !isLoading && <Spinner size="sm" color="gray.500" ml="4" />}
             </Heading>
 
-            <Link href="/users/create" passHref>
+            <NextLink href="/users/create" passHref>
               <Button
                 as="a"
                 cursor="pointer"
@@ -51,157 +79,98 @@ export default function UsersList() {
               >
                 Criar novo
               </Button>
-            </Link>
+            </NextLink>
           </Flex>
 
-          <Table colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th px={["4", "4", "6"]} color="gray.300" w="8">
-                  <Checkbox colorScheme="pink" />
-                </Th>
+          {isLoading ? (
+            <Flex justify="center">
+              <Spinner />
+            </Flex>
+          ) : error ? (
+            <Flex justify="center" >
+              <Text>Falha ao obter os dados dos usuários</Text>
+            </Flex>
+          ) : (
+            <>
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th px={["4", "4", "6"]} color="gray.300" w="8">
+                      <Checkbox colorScheme="pink" />
+                    </Th>
 
-                <Th>Usuário</Th>
+                    <Th>Usuário</Th>
 
-                {isWideVersion &&
-                  <>
-                    <Th>Data de cadastro</Th>
-                    <Th w={["5", "8"]}></Th>
-                  </>
-                }
-              </Tr>
-            </Thead>
+                    {isWideVersion &&
+                      <>
+                        <Th>Data de cadastro</Th>
+                        <Th w={["5", "8"]}></Th>
+                      </>
+                    }
+                  </Tr>
+                </Thead>
 
-            <Tbody>
-              <Tr>
-                <Td px={["4", "4", "6"]}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
+                <Tbody>
+                  {data.users.map(user => (
+                    <Tr key={user.id}>
+                      <Td px={["4", "4", "6"]}>
+                        <Checkbox colorScheme="pink" />
+                      </Td>
 
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Victor Hugo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      valvesperricci@yahoo.com.br
-                    </Text>
-                  </Box>
-                </Td>
+                      <Td>
+                        <Box>
+                          <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(user.id)}>
+                            <Text fontWeight="bold">{user.name}</Text>
+                          </Link>
+                          <Text fontSize="sm" color="gray.300">
+                            {user.email}
+                          </Text>
+                        </Box>
+                      </Td>
 
-                {isWideVersion && <Td>16 de Março, 2021</Td>}
+                      {isWideVersion && <Td>{user.created_at}</Td>}
 
-                {isWideVersion &&
-                  <Td>
-                    <Button
-                      as="a"
-                      cursor="pointer"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="purple"
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
-                      Editar
-                    </Button>
-                  </Td>
-                }
-              </Tr>
+                      {isWideVersion &&
+                        <Td>
+                          <Button
+                            as="a"
+                            cursor="pointer"
+                            size="sm"
+                            fontSize="sm"
+                            colorScheme="purple"
+                            leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
+                            Editar
+                          </Button>
+                        </Td>
+                      }
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
 
-              <Tr>
-                <Td px={["4", "4", "6"]}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
+              <Pagination
+                totalCountOfRegisters={data.totalCount}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            </>
+          )}
 
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Victor Hugo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      valvesperricci@yahoo.com.br
-                    </Text>
-                  </Box>
-                </Td>
-
-                {isWideVersion && <Td>16 de Março, 2021</Td>}
-
-                {isWideVersion &&
-                  <Td>
-                    <Button
-                      as="a"
-                      cursor="pointer"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="purple"
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
-                      Editar
-                    </Button>
-                  </Td>
-                }
-
-              </Tr>
-
-              <Tr>
-                <Td px={["4", "4", "6"]}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Victor Hugo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      valvesperricci@yahoo.com.br
-                    </Text>
-                  </Box>
-                </Td>
-
-                {isWideVersion && <Td>16 de Março, 2021</Td>}
-
-                {isWideVersion &&
-                  <Td>
-                    <Button
-                      as="a"
-                      cursor="pointer"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="purple"
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
-                      Editar
-                    </Button>
-                  </Td>
-                }
-              </Tr>
-
-              <Tr>
-                <Td px={["4", "4", "6"]}>
-                  <Checkbox colorScheme="pink" />
-                </Td>
-
-                <Td>
-                  <Box>
-                    <Text fontWeight="bold">Victor Hugo</Text>
-                    <Text fontSize="sm" color="gray.300">
-                      valvesperricci@yahoo.com.br
-                    </Text>
-                  </Box>
-                </Td>
-
-                {isWideVersion && <Td>16 de Março, 2021</Td>}
-
-                {isWideVersion &&
-                  <Td>
-                    <Button
-                      as="a"
-                      cursor="pointer"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="purple"
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}>
-                      Editar
-                    </Button>
-                  </Td>
-                }
-              </Tr>
-            </Tbody>
-          </Table>
-          <Pagination />
         </Box>
-      </Flex>
-    </Box>
+      </Flex >
+    </Box >
   );
 }
+
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const { users } = await getUsers(1);
+
+//   console.log(users)
+
+//   return {
+//     props: {
+//       users
+//     }
+//   }
+// }
